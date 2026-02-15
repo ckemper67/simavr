@@ -57,11 +57,8 @@ ifeq (${shell uname}, Darwin)
  CC			= clang
  AVR_ROOT 	:= "/Applications/Arduino.app/Contents/Java/hardware/tools/avr/"
  AVR 		:= ${AVR_ROOT}/bin/avr-
- # Thats for MacPorts libelf
- ifeq (${shell test -d /opt/local && echo Exists}, Exists)
-  ifneq (${shell test -d /opt/local/avr && echo Exists}, Exists)
-   $(error Please install avr-gcc: port install avr-gcc avr-libc)
-  endif
+ # Thats for MacPorts libelf -- only use if avr toolchain is actually installed
+ ifeq (${shell test -d /opt/local/avr && echo Exists}, Exists)
   ifneq (${shell test -d /opt/local/include/libelf && echo Exists}, Exists)
    $(error Please install libelf: port install libelf)
   endif
@@ -71,7 +68,8 @@ ifeq (${shell uname}, Darwin)
   AVR 		:= /opt/local/bin/avr-
  else
   # That's for Homebrew libelf and avr-gcc support
-  HOMEBREW_PREFIX ?= /usr/local
+  # Apple Silicon uses /opt/homebrew, Intel Macs use /usr/local
+  HOMEBREW_PREFIX ?= ${shell brew --prefix 2>/dev/null || echo /usr/local}
   ifeq (${shell test -d $(HOMEBREW_PREFIX)/Cellar && echo Exists}, Exists)
    ifneq (${shell test -d $(HOMEBREW_PREFIX)/Cellar/avr-gcc* && echo Exists}, Exists)
     $(error Please install avr-gcc: brew tap osx-cross/homebrew-avr ; brew install avr-libc)
