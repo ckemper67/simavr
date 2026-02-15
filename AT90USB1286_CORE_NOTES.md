@@ -1,5 +1,7 @@
 # AT90USB1286 Core Notes for simavr
 
+Datasheet and product page: https://www.microchip.com/en-us/product/at90usb1286#Documentation
+
 ## Key Differences from ATmega32U4
 
 | Feature | ATmega32U4 | AT90USB1286 |
